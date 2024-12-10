@@ -37,7 +37,7 @@ const CodeEditor = () => {
         >
           <span>{fileName}</span>
           <IoMdClose
-            className="ms-1"
+            className="ms-1 fs-5"
             style={{ cursor: "pointer" }}
             data-bs-toggle="tooltip"
             data-bs-placement="bottom"

@@ -1,21 +1,44 @@
-import { useState } from "react";
-import { useEffect } from "react";
+import { useState, useEffect } from "react";
 import { BsChevronDown, BsChevronRight } from "react-icons/bs";
 import { AiOutlineFileAdd } from "react-icons/ai";
 import { FiFolderPlus } from "react-icons/fi";
 import { Tooltip } from "bootstrap";
-import treeData from "./treeData.js";
+import { initialTreeData } from './treeData'; 
 
 const Sidebar = () => {
-  const projectName = "EVALVATION:";
+  const projectName = "EVALVATION";
 
   const [isExpanded, setIsExpanded] = useState(false);
+  const [tree, setTree] = useState(initialTreeData); 
 
   const handleToggle = () => {
     setIsExpanded(!isExpanded);
   };
 
-  const addFolder = () => {};
+  const readFile=(val)=>{
+    console.log(val);
+    
+  };
+
+  const addFolder = () => {
+    const newFolder = {
+      name: "Untitled",
+      type: "folder",
+      isOpen: false,
+      children: [],
+    };
+
+    setTree((prevTree) => [newFolder, ...prevTree]);
+  };
+
+  const addFile = () => {
+    const newFolder = {
+      name: "Untitled.txt",
+      type: "file",
+    };
+
+    setTree((prevTree) => [newFolder, ...prevTree]);
+  };
 
   useEffect(() => {
     const tooltipTriggerList = document.querySelectorAll(
@@ -26,25 +49,21 @@ const Sidebar = () => {
     });
   }, []);
 
-  
-
   const toggleFolder = (path) => {
     const updateTree = (nodes, pathIndex = 0) => {
       return nodes.map((node, idx) => {
         if (idx === path[pathIndex]) {
           if (pathIndex === path.length - 1) {
-            // This is the target node
             return { ...node, isOpen: !node.isOpen };
           }
           if (node.children) {
-            // Recursively update children
             return {
               ...node,
               children: updateTree(node.children, pathIndex + 1),
             };
           }
         }
-        return node; // No changes for other nodes
+        return node;
       });
     };
 
@@ -55,7 +74,7 @@ const Sidebar = () => {
   const renderTree = (nodes, path = []) =>
     nodes.map((node, idx) => {
       const currentPath = [...path, idx];
-      const isDirectRootLevel = path.length === 0; // Check if the file/folder is at the root level
+      const isDirectRootLevel = path.length === 0; 
 
       return (
         <div
@@ -67,13 +86,17 @@ const Sidebar = () => {
         >
           {node.type === "folder" ? (
             <div
-              onClick={() => toggleFolder(currentPath)}
-              style={{ cursor: "pointer" }}
+            onClick={() => toggleFolder(currentPath)}
+            style={{ cursor: "pointer" }}
+            className=" hover-bg-transparent"
             >
               {node.isOpen ? <BsChevronDown /> : <BsChevronRight />} {node.name}
             </div>
           ) : (
-            <div>📄 {node.name}</div>
+            <div 
+            onClick={() => readFile(node.name)}
+            style={{ cursor: "pointer" }}
+            className=" hover-bg-transparent">📄 {node.name}</div>
           )}
           {node.isOpen &&
             node.children &&
@@ -96,16 +119,17 @@ const Sidebar = () => {
           {isExpanded ? <BsChevronDown /> : <BsChevronRight />}
           <span className="ms-2 fs-6">{projectName}</span>
         </div>
-        <div className=" me-2">
+        <div className="me-2">
           <AiOutlineFileAdd
-            className="mx-2 cursor-pointer"
+            className="mx-2 cursor-pointer fs-5"
             style={{ cursor: "pointer" }}
             data-bs-toggle="tooltip"
             data-bs-placement="bottom"
             title="Create new file"
+            onClick={addFile}
           />
           <FiFolderPlus
-            className=" cursor-pointer"
+            className="cursor-pointer fs-5"
             style={{ cursor: "pointer" }}
             data-bs-toggle="tooltip"
             data-bs-placement="bottom"
@@ -115,7 +139,7 @@ const Sidebar = () => {
         </div>
       </div>
 
-      <div className=" text-light h-auto flex-grow-1">{renderTree(tree)}</div>
+      <div className="text-light h-auto flex-grow-1">{renderTree(tree)}</div>
     </div>
   );
 };
