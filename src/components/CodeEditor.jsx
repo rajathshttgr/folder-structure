@@ -1,10 +1,11 @@
 import { useState, useEffect } from "react";
 import { IoMdClose } from "react-icons/io";
+import { CiTextAlignLeft } from "react-icons/ci";
 import { Tooltip } from "bootstrap";
 
-const CodeEditor = () => {
+// eslint-disable-next-line react/prop-types
+const CodeEditor = ({ fileName }) => {
   const [code, setCode] = useState("");
-  const [fileName, setfileName] = useState("example.txt");
   const lines = code.split("\n").length;
 
   const handleInputChange = (e) => {
@@ -20,8 +21,6 @@ const CodeEditor = () => {
     });
   }, []);
 
-  setfileName;
-
   return (
     <div
       className="d-flex flex-column bg-dark text-light"
@@ -35,7 +34,10 @@ const CodeEditor = () => {
           className="bg-dark ps-2 pe-2"
           style={{ height: "95%", width: "auto" }}
         >
-          <span>{fileName}</span>
+          <span>
+            <CiTextAlignLeft className="me-1" />
+            {fileName}
+          </span>
           <IoMdClose
             className="ms-1 fs-5"
             style={{ cursor: "pointer" }}
