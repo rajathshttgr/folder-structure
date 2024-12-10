@@ -4,7 +4,7 @@ import { BsChevronDown, BsChevronRight } from "react-icons/bs";
 import { AiOutlineFileAdd } from "react-icons/ai";
 import { FiFolderPlus } from "react-icons/fi";
 import { Tooltip } from "bootstrap";
-import treeData from "";
+import treeData from "./treeData.js";
 
 const Sidebar = () => {
   const projectName = "EVALVATION:";
